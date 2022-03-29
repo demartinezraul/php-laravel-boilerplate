@@ -1,0 +1,66 @@
+<?php
+
+namespace Core\Application\ViewModels;
+
+use StdClass;
+
+/**
+ * O ViewModel é um padrão de design de interface do usuário que representa um modelo de dados usado em uma visão específica.
+ * É um dos componentes que serve para entrada ou saída de dados.
+ *
+ * É mais comumente utilizado somente em respostas de aplicações web que utilizam visões que precisam exibir dados de diversas entidades.
+ * Este padrão pode ou não conter validações de dados além disso, não deve conter métodos de ação ou que manipule alguma regra de negócio
+ *
+ * A vantagem arquitetônica do ViewModel é que as propriedades expostas aqui são dissociadas do modelo / entidade correspondente,
+ * ou seja, a forma como os dados estão dispostos no ViewModel são dispostos de forma que atenda apenas a visão específica.
+ *
+ * @see https://martinfowler.com/eaaDev/uiArchs.html
+ **/
+class {{name}}ViewModel
+{
+    private string $attribute1;
+    private float $attribute2;
+    private int $attribute3;
+    private array $attribute4;
+
+    private StdClass $attribute5;
+
+    public function __construct(
+        string $attribute1,
+        float $attribute2,
+        int $attribute3,
+        array $attribute4,
+        StdClass $attribute5
+    ) {
+        $this->attribute1 = $attribute1;
+        $this->attribute2 = $attribute2;
+        $this->attribute3 = $attribute3;
+        $this->attribute4 = $attribute4;
+        $this->attribute5 = $attribute5;
+    }
+
+    public function getAttribute1(): string
+    {
+        return $this->attribute1;
+    }
+
+    public function getAttribute2(): float
+    {
+        return $this->attribute2;
+    }
+
+    public function getAttribute3(): int
+    {
+        return $this->attribute3;
+    }
+
+    public function getAttribute4(): array
+    {
+        return $this->attribute4;
+    }
+
+    public function getAttribute5(): StdClass
+    {
+        return $this->attribute5;
+    }
+}

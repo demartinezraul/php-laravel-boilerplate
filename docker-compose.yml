@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+
+  box-app:
+    container_name: box-app
+    build:
+      context: .docker
+      dockerfile: Dockerfile
+    image: box-app
+    depends_on:
+      - box-db
+    environment:
+      XDEBUG_CONFIG: "${XDEBUG_CONFIG}"
+      APP_ENV: "${APP_ENV}"
+      APP_KEY: "${APP_KEY}"
+      APP_DEBUG: "${APP_DEBUG}"
+      APP_URL: "${APP_URL}"
+      PHP_IDE_CONFIG: "serverName=${HOST_SERVER_NAME}"
+    volumes:
+      - ./:/app:cached
+    env_file:
+      - .env
+    expose:
+      - 9001
+
+  box-nginx:
+    container_name: box-nginx
+    image: nginx:alpine
+    ports:
+      - "${APP_PORT}:80"
+    volumes:
+      - .docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached
+      - ./:/app:cached
+      - .docker/nginx/:/var/log/nginx/
+    depends_on:
+      - box-app
+      - box-db
+    links:
+      - box-db
+    env_file:
+      - .env
+
+  box-db:
+    container_name: box-db
+    image: mysql:8.0
+    ports:
+      - "8891:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    restart: on-failure
+    volumes:
+      - box-db-volume:/var/lib/mysql
+      - .docker/db/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+
+volumes:
+  box-db-volume:

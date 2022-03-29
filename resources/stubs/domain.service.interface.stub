@@ -1,0 +1,8 @@
+<?php
+
+namespace Core\Domain\Services\Contracts;
+
+interface {{name}}ServiceInterface
+{
+    public function doSomething();
+}

@@ -1,0 +1,902 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Microserviço de Faturamento Órigo.",
+        "description": "Documentação da API de Faturamento Órigo",
+        "version": "1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "variables": {
+                "schema": {
+                    "enum": [
+                        "https",
+                        "http"
+                    ],
+                    "default": "http"
+                }
+            }
+        },
+        {
+            "url": ""
+        }
+    ],
+    "paths": {
+        "/api/v1/faturas": {
+            "get": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Retorna uma lista do recurso Fatura",
+                "description": "Este endpoint fornece uma lista com todas as faturas encontradas. Além disso, é possível páginá-las\n     *      com a quantidade de itens desejados por página, orderná-los em ordem crescente ou decrescente, filtrá-las pelos campos\n     *      e por mês e ano.",
+                "operationId": "obterFaturas",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Quantidade de faturas exibidas por página",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "sort_type",
+                        "in": "query",
+                        "description": "Ordena a lista de faturas por ordem crescente ou decrescente. Valors Possíveis: asc / desc",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sort_column",
+                        "in": "query",
+                        "description": "Ordena a lista de faturas com base em um atributo da fatura (Deve ser informado junto com o sort_type)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "mes",
+                        "in": "query",
+                        "description": "Filtra a lista de faturas por mês. Valores possíveis: De 01 á 12",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "ano",
+                        "in": "query",
+                        "description": "Filtra a lista de faturas por ano. Valores possíveis: 2020 em diante",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "fazenda",
+                        "in": "query",
+                        "description": "Filtra a lista de faturas pela fazenda indicada. Valor possível: Identificador da Fazenda",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/HttpResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Resource Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Cria fatura com base nos dados informados",
+                "description": "Este endpoint cria uma fatura a partir dos dados obrigatórios informados. Para uma fatura ser criada\n     *      é necessário que ela tem pelo menos um item adicionado. O primeiro item da fatura deve ser o valor do plano.\n     *      Os outros itens podem ser descontos, créditos ou cobranças adicionais.",
+                "operationId": "criarFatura",
+                "requestBody": {
+                    "description": "Representa os dados necessários para criação de uma fatura.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CriarFaturaRequestDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Fatura Criada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados da Fatura São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Fatura Já Existe",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "options": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Retorna opções de requisição permitidas para o recurso Fatura",
+                "description": "Este endpoint retorna os verbos disponíveis para uso neste recurso,\n     *      os cabeçalhos permitidos e informações sobre CORS. As informações fornecidas aqui\n     *      servem como um guia para consumir os dados fornecidos por esta API.",
+                "operationId": "options",
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Edita alguns dados da fatura com os dados informados (DESCONTINUADO)",
+                "description": "Este endpoint edita uma fatura existente a partir dos dados informados.\n     *      As faturas só podem ser editadas enquanto não forem emitidas, ou seja, quando estiverem com status 'Aguardando'. Além disso, os itens também podem ser editados e novos itens podem ser adicionados.\n     *      Apenas o mês de referência, ciclo, data de previsão de pagamento e o vencimento em dia útil podem ser alterados",
+                "operationId": "editarFatura",
+                "requestBody": {
+                    "description": "Representa os dados necessários para edição da fatura.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditarFaturaRequestDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fatura Editada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados da Fatura São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Fatura Não Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "deprecated": true
+            }
+        },
+        "/api/v1/faturas/cancelar": {
+            "patch": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Cancela uma ou mais faturas a partir de um identificador único (ID)",
+                "description": "Este endpoint cancela uma ou mais faturas a partir do seu identificador único.\n     *      O identificador é um número inteiro e podem ser representados como no exemplo a seguir:\n     *      Exemplos de Identificador: 34509, 23921, 54873.\n     *      Para cancelar uma ou mais faturas, é necessário informar um array\n     *      com os IDs de cada uma. Além disso é importante saber que o mesmo motivo e observação do cancelamento\n     *      será aplicado para todas as faturas que serão canceladas.",
+                "operationId": "cancelarFatura",
+                "requestBody": {
+                    "description": "Representa os dados necessários para cancelamento de uma ou mais faturas.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelamentoFaturaRequestDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Fatura(s) Cancelada(s)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados Enviados São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Fatura(s) Não Encontrada(s)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/faturas/{id}": {
+            "get": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Consulta uma fatura a partir de um identificador único (ID) para visualização",
+                "description": "Este endpoint realiza uma consulta para visualização de detalhes de uma fatura específica\n     *      a partir de do seu identificador único. O identificador é um número inteiro.",
+                "operationId": "visualizarFatura",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador da Fatura",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fatura Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados Enviados São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Fatura Não Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/faturas/segunda-via": {
+            "post": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Gera segunda via de uma fatura com base nos dados atuais",
+                "description": "",
+                "operationId": "gerarSegundaViaFatura",
+                "requestBody": {
+                    "description": "Representa os dados necessários para criação de uma fatura.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GerarSegundaViaRequestDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Segunda Via da Fatura Gerada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados da Fatura São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/faturas/{id}/historico": {
+            "get": {
+                "tags": [
+                    "Fatura"
+                ],
+                "summary": "Consulta o histórico de uma fatura a partir de um identificador único (ID)",
+                "description": "Este endpoint realiza uma consulta para visualização de um histórico contendo todas as ações realizadas em uma fatura. Exemplo: Quando uma fatura é criada, é registrado em seu histórico quando foi criada e quem a criou.",
+                "operationId": "visualizarHistoricoFatura",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identificador da Fatura",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Histórico da Fatura Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados Enviados São Inválidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Histórico da fatura não encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro Interno no Servidor",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HttpResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CancelamentoFaturaRequestDTO": {
+                "title": "CancelamentoFaturaRequestDTO",
+                "description": "Representa os dados necessários para cancelamento da fatura",
+                "required": [
+                    "id",
+                    "motivo"
+                ],
+                "properties": {
+                    "id": {
+                        "title": "id",
+                        "description": "Identificador da Fatura",
+                        "type": "Array",
+                        "example": "[1, 2, 3, 4]"
+                    },
+                    "motivo": {
+                        "title": "motivo",
+                        "description": "Motivo de cancelamento da fatura",
+                        "type": "string",
+                        "example": "Alteração Fatura"
+                    },
+                    "observacao": {
+                        "title": "observacao",
+                        "description": "Observação do cancelamento da fatura",
+                        "type": "string",
+                        "example": "Esta fatura foi cancelada por que..."
+                    }
+                },
+                "type": "object"
+            },
+            "CriarFaturaRequestDTO": {
+                "title": "CriarFaturaRequestDTO",
+                "description": "Representa os dados necessários para criação de uma fatura",
+                "required": [
+                    "numero_instalacao",
+                    "mes_referencia",
+                    "tipo",
+                    "ciclo",
+                    "forma_pagamento_permitida",
+                    "itens"
+                ],
+                "properties": {
+                    "cliente": {
+                        "title": "Cliente",
+                        "description": "Cliente para o qual a fatura será gerada. Deve ser informado o UUID v4 do cliente",
+                        "type": "string",
+                        "example": 1
+                    },
+                    "mes_referencia": {
+                        "title": "Mês e Ano de Refência da Fatura",
+                        "description": "Representa o mês e ano de referência o qual a fatura está sendo criada. Deve ser informado apenas o mês e o ano",
+                        "type": "string",
+                        "example": "01/2020"
+                    },
+                    "tipo": {
+                        "title": "Tipo da Fatura",
+                        "description": "Atualmente existem faturas dos seguintes tipos: mensalidade, segunda_via, multa_rescisoria, devolucao_desconto_imediato ",
+                        "type": "string",
+                        "example": "mensalidade"
+                    },
+                    "ciclo": {
+                        "title": "Ciclo da Fatura",
+                        "description": "O ciclo da fazenda a qual esta fatura será associada",
+                        "type": "int",
+                        "example": 3
+                    },
+                    "data_vencimento": {
+                        "title": "Data de Vencimento",
+                        "description": "Representa a data em que a fatura vencerá. Caso não seja informada, a data de vencimento será definida automaticamente para 10 dias posteriores ou para o próximo dia útil",
+                        "type": "string",
+                        "example": "01/12/2020"
+                    },
+                    "data_previsao_pagamento": {
+                        "title": "Data de Previsão do Pagamento",
+                        "description": "Data prevista em que o cliente poderá realizar o pagamento da fatura",
+                        "type": "string",
+                        "example": "01/11/2020"
+                    },
+                    "data_emissao": {
+                        "title": "Data de Emissão",
+                        "description": "Data em que a fatura deve ser emtiida. Pode ser a data atual ou uma data futura",
+                        "type": "string",
+                        "example": "01/11/2020"
+                    },
+                    "forma_pagamento_permitida": {
+                        "title": "Forma de Pagamento Permitida",
+                        "description": "Rerepsenta as formas de pagamento que o cliente poderá utilizar para realizar o pagamento de uma fatura específica. Na criação da fatura as formas que podem ser definidas são: CARTÃO DE CRÉDITO (1), BOLETO (2), TODAS (3)",
+                        "type": "string",
+                        "example": "bank_slip"
+                    },
+                    "vencimento_dia_util": {
+                        "title": "Vencimento em Dia Útil?",
+                        "description": "Flag que determina se a fatura só deve vencer em dias úteis ou não",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "percentual_multa_atraso": {
+                        "title": "Percentual da Multa Aplicada",
+                        "description": "Percentual da multa que deve ser aplicada a fatura quando o cliente atrasar o pagamento. Deve ser informado em formato numérico sem o sinal '%'",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "percentual_juros_pro_rata": {
+                        "title": "Percentual da Juros Pro Rata",
+                        "description": "Percentual do juros que deve ser aplicada a fatura quando o cliente atrasar o pagamento. Este juros é aplicado a cada mês. Deve ser informado em formato numérico sem o sinal '%'",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "itens": {
+                        "title": "Itens",
+                        "description": "Representa o item da fatura. Deve conter as seguintes chaves: descricao, quantidade, valor e ciclo.",
+                        "type": "Array",
+                        "example": "[{ \"descricao\": \"Descrição do item da fatura\", \"quantidade\": 1, \"valor\": 100, \"ciclo\": 6 }]"
+                    },
+                    "fatura_id": {
+                        "title": "Identificador da Fatura",
+                        "description": "Caso o tipo da fatura seja segunda_via o identificador da fatura que deseja gerar a segunda deve ser informado",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "observacao": {
+                        "title": "Observação de Cancelamento",
+                        "description": "Este é campo é opcional. Só deve ser informado Caso o tipo da fatura a ser criada seja segunda_via. A observação é uma justificativa do porque a segunda via está sendo criada. Pois ao gerar a segunda via, a fatura original é cancelada",
+                        "type": "string",
+                        "example": "O cliente solicitou uma segunda via"
+                    }
+                },
+                "type": "object"
+            },
+            "EditarFaturaRequestDTO": {
+                "title": "EditarFaturaRequestDTO",
+                "description": "Representa os dados necessários para criação de uma fatura",
+                "required": [
+                    "fatura_id",
+                    "mes_referencia",
+                    "tipo",
+                    "ciclo",
+                    "data_previsao_pagamento",
+                    "vencimento_dia_util"
+                ],
+                "properties": {
+                    "fatura_id": {
+                        "title": "Identificador da Fatura",
+                        "description": "Caso o tipo da fatura seja segunda_via o identificador da fatura que deseja gerar a segunda deve ser informado",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "mes_referencia": {
+                        "title": "Mês e Ano de Refência da Fatura",
+                        "description": "Representa o mês e ano de referência o qual a fatura está sendo alterada. Deve ser informado apenas o mês e o ano",
+                        "type": "string",
+                        "example": "01/2020"
+                    },
+                    "tipo": {
+                        "title": "Tipo da Fatura",
+                        "description": "Atualmente existem faturas dos seguintes tipos: mensalidade, segunda_via, multa_rescisoria, devolucao_desconto_imediato ",
+                        "type": "string",
+                        "example": "mensalidade"
+                    },
+                    "ciclo": {
+                        "title": "Ciclo da Fatura",
+                        "description": "O ciclo da fazenda a qual esta fatura será associada",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "data_previsao_pagamento": {
+                        "title": "Data de Previsão do Pagamento",
+                        "description": "Data prevista em que o cliente poderá realizar o pagamento da fatura",
+                        "type": "string",
+                        "example": "01/11/2020"
+                    },
+                    "vencimento_dia_util": {
+                        "title": "Vencimento em Dia Útil?",
+                        "description": "Flag que determina se a fatura só deve vencer em dias úteis ou não",
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object",
+                "deprecated": true
+            },
+            "GerarSegundaViaRequestDTO": {
+                "title": "GerarSegundaViaRequestDTO",
+                "description": "Representa os dados de uma requisição HTTP enviada por uma aplicação cliente",
+                "required": [
+                    "fatura_id",
+                    "observacao_cancelamento"
+                ],
+                "properties": {
+                    "fatura_id": {
+                        "title": "fatura_id",
+                        "description": "fatura_id do DTO",
+                        "type": "string",
+                        "example": 1
+                    },
+                    "ciclo": {
+                        "title": "ciclo",
+                        "description": "ciclo do DTO",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "observacao": {
+                        "title": "Observação do Cancelamento",
+                        "description": "Observações adicionais a respeito da geraçãp da segunda via",
+                        "type": "string",
+                        "example": "Observação sobre o cancelamento"
+                    },
+                    "data_vencimento": {
+                        "title": "Data de Vencimento",
+                        "description": "Data de Vencimento da Segunda Via da fatura a ser geradas",
+                        "type": "string",
+                        "example": "20/10/2021"
+                    },
+                    "data_previsao_pagamento": {
+                        "title": "Data de Previsão de Pagameno",
+                        "description": "Data de Previsão de Pagamento da Segunda Via da fatura a ser geradas",
+                        "type": "string",
+                        "example": "20/10/2022"
+                    },
+                    "vencimento_dia_util": {
+                        "title": "Vencimento em dia Útil",
+                        "description": "Flag se o vencimento deverá ser em dia útil",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "percentual_multa_atraso": {
+                        "title": "Oorcentagem de multa",
+                        "description": "Porcentagem de mula a ser aplicado",
+                        "type": "int",
+                        "example": 2
+                    },
+                    "percentual_juros_pro_rata": {
+                        "title": "Porcentagem de juros pró-rata",
+                        "description": "Porcentagem de juros pró-rata a ser aplicado",
+                        "type": "int",
+                        "example": 1
+                    },
+                    "forma_pagamento_permitida": {
+                        "title": "Forma de Pagametno",
+                        "description": "Tipo de pagamento que deve ser gerado a segunda via",
+                        "type": "string",
+                        "example": "bank_slip"
+                    },
+                    "mes_referencia": {
+                        "title": "Mês Referência",
+                        "description": "Mês de referência da segunda via da fatura a ser gerada",
+                        "type": "string",
+                        "example": "12/2020"
+                    }
+                },
+                "type": "object"
+            },
+            "HttpResponseDTO": {
+                "title": "HttpResponseDTO",
+                "description": "Representa a resposta a uma solicitação",
+                "required": [
+                    "status",
+                    "message"
+                ],
+                "properties": {
+                    "status": {
+                        "title": "status",
+                        "description": "Status da Reposta",
+                        "type": "integer",
+                        "example": "200"
+                    },
+                    "messages": {
+                        "title": "messages",
+                        "description": "Mensagem de sucesso ou falha associada a ação aplicada ao recurso",
+                        "type": "mixed",
+                        "example": "Operação realizada com sucesso ou ocorreu um erro"
+                    },
+                    "data": {
+                        "title": "data",
+                        "description": "Dados do Retornados",
+                        "type": "mixed",
+                        "example": "Objeto, array, string ou números "
+                    }
+                },
+                "type": "object"
+            },
+            "ListaPaginadaResponseDTO": {
+                "title": "ListaPaginadaResponseDTO",
+                "description": "Representa uma lista de registros paginados",
+                "properties": {
+                    "payload": {
+                        "title": "Dados do Recurso",
+                        "description": "Lista com oo registros encontrados",
+                        "type": "Array",
+                        "example": ""
+                    },
+                    "limit": {
+                        "title": "limit",
+                        "description": "Número de faturas encontradas",
+                        "type": "integer",
+                        "example": "0|10"
+                    },
+                    "has_pagination": {
+                        "title": "has_pagination",
+                        "description": "Informa se a lista possui um número de páginas maior que 1",
+                        "type": "boolean",
+                        "example": "true|false"
+                    },
+                    "current_page": {
+                        "title": "current_page",
+                        "description": "Página atual referente ao histórico da encontrado",
+                        "type": "integer",
+                        "example": "1|5"
+                    },
+                    "first_page": {
+                        "title": "first_page",
+                        "description": "Número da primeira Página do histórico encontrada",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "last_page": {
+                        "title": "last_page",
+                        "description": "Número da última Página do histórico encontrado",
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "first_page_url": {
+                        "title": "first_page",
+                        "description": "Endereço da primeira página do histórico encontrado",
+                        "type": "string",
+                        "example": "/api/v1/faturas?page=1"
+                    },
+                    "next_page_url": {
+                        "title": "nextPage",
+                        "description": "Endereço da página seguinte do histórico encontrado",
+                        "type": "string",
+                        "example": "/api/v1/faturas?page=2"
+                    },
+                    "previous_page_url": {
+                        "title": "previousPage",
+                        "description": "Endereço da página anterior do histórico encontrado",
+                        "type": "string",
+                        "example": "/api/v1/faturas?page=1"
+                    },
+                    "total": {
+                        "title": "Total de registros encontrados",
+                        "description": "Total de registros armazenados que foram encontrados com ou sem filtro",
+                        "type": "integer",
+                        "example": "100"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "Password Based": {
+                "type": "oauth2",
+                "description": "",
+                "in": "header",
+                "flows": {
+                    "password": {
+                        "authorizationUrl": "/oauth/authorize",
+                        "tokenUrl": "/oauth/token",
+                        "refreshUrl": "/oauth/token/refresh",
+                        "scopes": {}
+                    }
+                },
+                "scheme": "https"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Fatura",
+            "description": "Operações disponíveis no recurso Fatura",
+            "externalDocs": {
+                "description": "Mais informações em",
+                "url": ""
+            }
+        }
+    ],
+    "security": [
+        []
+    ]
+}

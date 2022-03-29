@@ -1,0 +1,9 @@
+<?php
+
+namespace Core\Domain\HttpClients;
+
+interface {{name}}HttpClientInterface
+{
+    public function getEndpoint();
+    public function postEndpoint();
+}

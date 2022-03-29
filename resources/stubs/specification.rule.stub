@@ -1,0 +1,24 @@
+<?php
+
+namespace Core\Domain\Specifications\Conditionals;
+
+use Core\Domain\Specifications\Contracts\SpecificationInterface;
+use Core\Domain\Specifications\AbstractCompositeRule;
+
+class {{name}}Rule extends AbstractCompositeSpecification implements SpecificationInterface
+{
+
+  private $left;
+  private $right;
+
+  public function __construct(SpecificationInterface $left, SpecificationInterface $right)
+  {
+    $this->left = $left;
+    $this->right = $right;
+  }
+
+  public function isSatisfiedBy($object): bool
+  {
+      return $this->left->isSatisfiedBy($object) && $this->right->isSatisfiedBy($object);
+  }
+}

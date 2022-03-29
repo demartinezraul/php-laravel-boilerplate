@@ -1,0 +1,29 @@
+<?php
+
+namespace Core\Infrastructure\Eloquent;
+
+use Illuminate\Database\Eloquent\Model;
+
+class {{name}}Eloquent extends Model
+{
+
+    protected $table = '{{name}}';
+    protected $primaryKey = 'id';
+
+    protected $attributes = [
+        'delayed' => false,
+    ];
+
+    public $incrementing = true;
+    protected $keyType = 'string';
+    public $timestamps = true;
+    protected $dateFormat = 'U';
+
+    public const CREATED_AT = 'created_at';
+    public const UPDATED_AT = 'updated_at';
+
+    public function relation()
+    {
+        return $this->belongsTo(OtherEloquentModel::class, 'foreign_id', 'id');
+    }
+}

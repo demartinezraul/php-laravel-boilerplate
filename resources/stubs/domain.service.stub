@@ -1,0 +1,24 @@
+<?php
+
+namespace Core\Domain\Services;
+
+use Core\Domain\Services\Contracts\{{name}}ServiceInterface;
+
+class {{name}}Service implements {{name}}ServiceInterface
+{
+    private BaseRepositoryInterface $exampleRepository;
+    private BaseHttpClientInterface $exampleHttpClient;
+
+    public function __construct(
+        BaseRepositoryInterface $exampleRepository,
+        BaseHttpClientInterface $examplehttpClient
+    ) {
+        $this->exampleRepository = $exampleRepository;
+        $this->examplehttpClient = $examplehttpClient;
+    }
+
+    public function doSomething()
+    {
+        //
+    }
+}

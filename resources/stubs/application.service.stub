@@ -1,0 +1,14 @@
+<?php
+
+namespace Core\Application\Services;
+
+use Core\Application\Services\Contracts\{{name}}ServiceInterface;
+
+class {{name}}Service implements {{name}}ServiceInterface
+{
+
+    public function execute()
+    {
+        //
+    }
+}

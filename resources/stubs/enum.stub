@@ -1,0 +1,9 @@
+<?php
+
+namespace Core\Domain\Enums;
+
+class {{name}}Enum
+{
+    public const EXAMPLE_1 = 'exemplo 1';
+    public const EXAMPLE_2 = 'exemplo 2';
+}

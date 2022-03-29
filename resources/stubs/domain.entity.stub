@@ -1,0 +1,46 @@
+<?php
+
+namespace Core\Domain\Entities;
+
+class {{name}}Entity extends AbstractBaseEntity
+{
+
+    private string $atributo1;
+    private float $atributo2;
+
+    private const ATRIBUTO_OBRIGATORIO = 'Essa informação é obrigatória';
+
+    public function __construct(string $atributo1, float $atributo2)
+    {
+        $this->atributo1 = $atributo1;
+        $this->atributo2 = $atributo2;
+    }
+
+    public function create(array $dados): self
+    {
+        return self($dados['atributo1'], $dados['atributo2']);
+    }
+
+    public function validate(): void
+    {
+
+    }
+
+    public function getAtributo1(): string
+    {
+        return $this->atributo1;
+    }
+
+    public function getAtributo2(): float
+    {
+        return $this->atributo2;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'atributo_1' => $this->atributo1,
+            'atributo_2' => $this->atributo2,
+        ];
+    }
+}

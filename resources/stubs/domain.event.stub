@@ -1,0 +1,25 @@
+<?php
+
+namespace Core\Domain\Events;
+
+class {{name}}Event
+{
+    private int $id;
+    private string $date;
+
+    public function __construct(int $id, string $date)
+    {
+        $this->id = $id;
+        $this->date = $date
+    }
+
+    public function getID(): int
+    {
+        return $this->id;
+    }
+
+    public function getDate(): string
+    {
+        return $this->date;
+    }
+}

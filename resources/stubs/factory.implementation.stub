@@ -1,0 +1,18 @@
+<?php
+
+namespace Core\Domain\Factories;
+
+/**
+*
+*
+**/
+class {{name}}Factory
+{
+
+    public static function create(string $tipo)
+    {
+        switch ($tipo) {
+
+        }
+    }
+}

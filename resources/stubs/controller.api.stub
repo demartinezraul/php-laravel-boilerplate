@@ -1,0 +1,337 @@
+<?php
+
+namespace Core\Application\Controllers\V1;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Core\Application\Controllers\Swagger;
+
+/**
+ * @OA\Tag(
+ *     name="Example",
+ *     description="Operações sobre Example",
+ *     @OA\ExternalDocumentation(
+ *         description="Mais informações em",
+ *         url="#"
+ *     )
+ * ),
+ *
+ */
+class {{name}}Controller extends SwaggerController
+{
+
+    public function __construct()
+    {
+    }
+
+    /**
+     * @OA\Options(
+     *      path="/example/options",
+     *      operationId="options",
+     *      tags={"Example"},
+     *      summary="Retorna opções de requisição permitidas para este recurso",
+     *      description="Este endpoint retorna os verbos disponíveis para uso neste recurso, os cabeçalhos permitidos e informações sobre CORS.",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Erro Interno no Servidor",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     * )
+     */
+    public function options()
+    {
+        return response()->json(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @OA\Head(
+     *      path="/example/options",
+     *      operationId="head",
+     *      tags={"Example"},
+     *      summary="Retorna informações de status de resposta e cabeçalhos do servidor",
+     *      description="Este endpoint é usado para saber se o recurso existe no servidor ou não analisando o status ou o cabeçalho da resposta. A resposta desse enpoint não possui corpo.",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function head(Request $request)
+    {
+        return response(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/example/get",
+     *      operationId="get-all",
+     *      tags={"Example"},
+     *      summary="Retorna uma lista de recursos",
+     *      description="Este endpoint fornece uma lista com todos os recursos armazenados. ",
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *      @OA\JsonContent(type="array",
+     *          @OA\Items(ref="#/components/schemas/HttpResponseDTO")
+     *      )),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function all(Request $request)
+    {
+        return response(null, Response ::HTTP_OK);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/example/get/{id}",
+     *      operationId="get",
+     *      tags={"Example"},
+     *      summary="Retorna o recurso a partir de um identificador único",
+     *      description="Este endpoint fornece informações sobre um recurso solicitado a partir de um identificador único informado",
+     *
+     *      @OA\Parameter(
+     *          name="id",
+     *          description=" id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function get(Request $request)
+    {
+        return response(null, Response::HTTP_OK);
+    }
+
+    /**
+     * @OA\Post(
+     *      path="/example/post",
+     *      operationId="post",
+     *      tags={"Example"},
+     *      summary="Cria o recurso a partir das informações enviadas no corpo da solicitação",
+     *      description="Este endpoint é responsável pela criação de um recurso do tipo 'Exemplo'. Para criação do mesmo, é necesário enviar no corpo da solicitação o modelo descrito no exemplo em formato JSON.j",
+     *
+     *      @OA\RequestBody(
+     *          description="Este modelo é utilizado para criação do recurso exemplo.",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=201,
+     *          description="Created",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *       ),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function post(Request $request)
+    {
+        return response(null, Response::HTTP_CREATED);
+    }
+
+    /**
+     * @OA\Put(
+     *      path="/example/put/{id}",
+     *      operationId="put",
+     *      tags={"Example"},
+     *      summary="Atualiza o recurso especificado a partir de um identificador único",
+     *      description="Este endpoint possibilita a atualização de todos os dados do recurso a partid de um identificador único",
+     *
+     *      @OA\Parameter(
+     *          name="id",
+     *          description=" id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *       ),
+     *      @OA\Response(response=204, description="No Content"),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+
+     *      )
+     * )
+     */
+    public function put(Request $request)
+    {
+        return response(null, Response::HTTP_NO_CONTENT)
+    }
+
+    /**
+     * @OA\Patch(
+     *      path="/example/patch/{id}",
+     *      operationId="patch",
+     *      tags={"Example"},
+     *      summary="Atualizar parcialmente o recurso a partir de um identificador único",
+     *      description="Este endpoint possibilita atualização de partes ou informações específicas do recurso partir de um identificador único informado",
+     *
+     *      @OA\Parameter(
+     *          name="id",
+     *          description=" id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *
+     *      @OA\Response(
+     *          response=200,
+     *          description="OK",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *       ),
+     *      @OA\Response(response=204, description="No Content"),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function patch(Request $request)
+    {
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @OA\Delete(
+     *      path="/example/delete/{id}",
+     *      operationId="delete",
+     *      tags={"Example"},
+     *      summary="Remove o recurso especificado a partir de um identificador único",
+     *      description="Este endpoint possibilita a remoção do recurso partir de um identificador único informado",
+     *
+     *      @OA\Parameter(
+     *          name="id",
+     *          description=" id",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\Response(response=204, description="No Content"),
+     *      @OA\Response(
+     *          response=400,
+     *          description="Bad request",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="Resource Not Found",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(ref="#/components/schemas/HttpResponseDTO"),
+     *      )
+     * )
+     */
+    public function delete(Request $request)
+    {
+        return response(null, Response::HTTP_NO_CONTENT);
+    }
+}

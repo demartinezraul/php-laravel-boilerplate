@@ -1,0 +1,13 @@
+<?php
+
+namespace Core\Domain\Specifications;
+
+use Core\Domain\Specifications\Contracts;
+
+class {{name}}Specification extends AbstractCompositeSpecification implements SpecificationInterface
+{
+  public function isSatisfiedBy($object) : bool
+  {
+      return !is_null($object) ? true : false;
+  }
+}

@@ -1,0 +1,8 @@
+grumphp:
+  tasks:
+    phpcs: null
+    phpmd:
+      whitelist_patterns:
+        - /^src\/(.*)/
+      ruleset:
+        - ./ruleset.xml

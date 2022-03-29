@@ -1,0 +1,8 @@
+<?php
+
+namespace Core\Domain\Repositories;
+
+interface {{name}}RepositoryInterface
+{
+
+}
